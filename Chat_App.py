@@ -14,6 +14,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.retrievers import BM25Retriever
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
+from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 
 # ====================== CONNECTION ======================
