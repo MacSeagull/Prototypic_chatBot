@@ -1,0 +1,12 @@
+streamlit
+langchain
+langchain-openai
+langchain-postgres
+langchain-huggingface
+langchain-community
+langchain-core
+psycopg[binary]
+sentence-transformers
+python-dotenv
+torch
+torchvision
