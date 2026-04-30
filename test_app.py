@@ -90,11 +90,33 @@ embeddings = HuggingFaceEmbeddings(
 
 # --- 4. RETRIEVER SETUP ---
 # Vektoren direkt aus SQLite laden (LangChain speichert document + embedding)
+class SimpleVectorRetriever:
+    """Einfacher In-Memory Vectorstore ohne externe Abhängigkeiten – nur numpy."""
+    def __init__(self, docs, embeddings):
+        import numpy as np
+        self.docs = docs
+        self.embeddings = embeddings
+        texts = [d.page_content for d in docs]
+        vecs = embeddings.embed_documents(texts)
+        self.matrix = np.array(vecs, dtype="float32")
+        # Normalisieren für Cosine Similarity
+        norms = np.linalg.norm(self.matrix, axis=1, keepdims=True)
+        self.matrix = self.matrix / np.maximum(norms, 1e-10)
+
+    def invoke(self, query, k=12):
+        import numpy as np
+        q_vec = np.array(self.embeddings.embed_query(query), dtype="float32")
+        q_vec = q_vec / max(np.linalg.norm(q_vec), 1e-10)
+        scores = self.matrix @ q_vec
+        top_k = int(k)
+        indices = np.argsort(scores)[::-1][:top_k]
+        return [self.docs[i] for i in indices]
+
+
 def load_vectorstore_from_sqlite(db_path, embeddings):
     """Lädt gespeicherte Dokumente aus SQLite und baut einen In-Memory Vectorstore."""
     import json
     from langchain_core.documents import Document
-    from langchain_community.vectorstores import Chroma
 
     docs = []
     try:
@@ -109,14 +131,14 @@ def load_vectorstore_from_sqlite(db_path, embeddings):
             for table in tables:
                 cursor.execute(f"PRAGMA table_info('{table}')")
                 cols = [row[1] for row in cursor.fetchall()]
-                
+
                 if 'document' in cols:
                     meta_col = 'cmetadata' if 'cmetadata' in cols else None
                     if meta_col:
                         cursor.execute(f'SELECT document, {meta_col} FROM "{table}"')
                     else:
                         cursor.execute(f'SELECT document FROM "{table}"')
-                    
+
                     for row in cursor.fetchall():
                         text = row[0]
                         metadata = {}
@@ -131,11 +153,10 @@ def load_vectorstore_from_sqlite(db_path, embeddings):
         print(f"Fehler beim Laden des Vectorstores: {e}")
 
     if docs:
-        return Chroma.from_documents(docs, embeddings)
+        return SimpleVectorRetriever(docs, embeddings)
     return None
 
-vectorstore = load_vectorstore_from_sqlite(DB_PATH, embeddings)
-vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 12}) if vectorstore else None
+vector_retriever = load_vectorstore_from_sqlite(DB_PATH, embeddings)
 
 bm25_retriever = None
 if all_texts:
