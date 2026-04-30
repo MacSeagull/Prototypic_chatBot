@@ -92,8 +92,9 @@ embeddings = HuggingFaceEmbeddings(
 # Vektoren direkt aus SQLite laden (LangChain speichert document + embedding)
 def load_vectorstore_from_sqlite(db_path, embeddings):
     """Lädt gespeicherte Dokumente aus SQLite und baut einen In-Memory Vectorstore."""
+    import json
     from langchain_core.documents import Document
-    from langchain_community.vectorstores import FAISS
+    from langchain_community.vectorstores import Chroma
 
     docs = []
     try:
@@ -121,7 +122,6 @@ def load_vectorstore_from_sqlite(db_path, embeddings):
                         metadata = {}
                         if meta_col and row[1]:
                             try:
-                                import json
                                 metadata = json.loads(row[1])
                             except Exception:
                                 pass
@@ -131,7 +131,7 @@ def load_vectorstore_from_sqlite(db_path, embeddings):
         print(f"Fehler beim Laden des Vectorstores: {e}")
 
     if docs:
-        return FAISS.from_documents(docs, embeddings)
+        return Chroma.from_documents(docs, embeddings)
     return None
 
 vectorstore = load_vectorstore_from_sqlite(DB_PATH, embeddings)
