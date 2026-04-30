@@ -10,3 +10,8 @@ sentence-transformers
 python-dotenv
 torch
 torchvision
+rank-bm25
+numpy
+pandas
+requests
+sqlalchemy
