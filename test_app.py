@@ -34,6 +34,32 @@ except:
 # --- SQLite Pfad ---
 DB_PATH = os.path.join(os.path.dirname(__file__), 'medical_data.db')
 db_connection_str = f"sqlite:///{DB_PATH}"
+############################
+
+# DIAGNOSE - danach wieder entfernen
+with sqlite3.connect(DB_PATH) as conn:
+    cursor = conn.cursor()
+    
+    # Alle Tabellen anzeigen
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    tables = [row[0] for row in cursor.fetchall()]
+    st.write("📋 Tabellen in der DB:", tables)
+    
+    for table in tables:
+        cursor.execute(f"PRAGMA table_info('{table}')")
+        cols = [row[1] for row in cursor.fetchall()]
+        st.write(f"  → {table}: Spalten = {cols}")
+        
+        # Erste Zeile als Vorschau
+        cursor.execute(f'SELECT * FROM "{table}" LIMIT 1')
+        row = cursor.fetchone()
+        st.write(f"  → Beispielzeile: {str(row)[:200]}")
+
+
+
+#################################
+
+
 
 
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
