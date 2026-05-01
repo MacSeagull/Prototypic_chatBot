@@ -264,7 +264,8 @@ def run_smart_query_streamlit(question):
     data = hybrid_retrieval_with_sources(question)
     
     if not data["context"]:
-        return(f"⚠️ Keine Treffer in der Datenbank.")
+        #return(f"⚠️ Keine Treffer in der Datenbank.")
+        return {"antwort": "⚠️ Keine Treffer in der Datenbank.", "quellen": ""}
     
     current_chain = prompt | model
          
@@ -300,7 +301,34 @@ Dieses Versuchsprojekt enthält bislang nur folgende Wissensquellen:
 st.divider()
 
 # Eingabefeld
-#frage = st.text_input("🔍 Ihre Frage:", placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und <SUCHEN> klicken)")
+# Die Checkbox für die Quellen-Abfrage
+st.markdown("---")
+quellen_anzeigen = st.checkbox("Quellen anzeigen?")
+
+if st.button("Suchen") and frage:
+    with st.spinner("Suche läuft..."):
+        # Ergebnis abrufen (jetzt ein Dictionary)
+        ergebnis = run_smart_query_streamlit(frage)
+        antwort = ergebnis["antwort"]
+        quellen = ergebnis["quellen"]
+        
+        # Antwort anzeigen
+        st.markdown("### Antwort:")
+        st.markdown(antwort)
+        
+        # Logik für die Quellenanzeige
+        if quellen_anzeigen and quellen:
+            with st.expander("📚 Verwendete Quellen", expanded=True):
+                st.markdown(quellen)
+        
+        # Protokoll speichern (mit Quellen für später)
+        if "protokoll" not in st.session_state:
+            st.session_state.protokoll = []
+        st.session_state.protokoll.append({
+            "frage": frage, 
+            "antwort": antwort, 
+            "quellen": quellen
+        })
 
 st.markdown('<p style="font-size:24px; font-weight:bold;">🔍 Ihre Frage:</p>', unsafe_allow_html=True)
 frage = st.text_input(
@@ -331,7 +359,7 @@ if "protokoll" in st.session_state and len(st.session_state.protokoll) > 0:
             st.markdown(eintrag["antwort"])
             
 st.divider()
-st.markdown("### 📧 drop a message to Helge")
+st.markdown("### like/dislike? 📧 drop a note to Helge")
 
 with st.form("kontakt_formular"):
     name = st.text_input("Ihr Name:")
