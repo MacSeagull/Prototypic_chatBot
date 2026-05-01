@@ -304,8 +304,8 @@ st.divider()
 
 st.markdown('<p style="font-size:24px; font-weight:bold;">🔍 Ihre Frage:</p>', unsafe_allow_html=True)
 frage = st.text_input(
-    label="Ihre Frage", 
-    placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und <SUCHEN> klicken)")",
+    label="🔍  Ihre Frage", 
+    placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und <SUCHEN> klicken)",
     label_visibility="collapsed"
 )
 
