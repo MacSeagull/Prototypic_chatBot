@@ -13,3 +13,5 @@ pandas
 requests
 sqlalchemy
 huggingface-hub
+torch
+torchvision
