@@ -5,10 +5,10 @@ Created on Wed Apr 22 14:33:45 2026
 
 @author: sigillus
 """
-#=============================================
+#==================================================
 # hybrid RAG  bot mit reciprocal ranking
-# HIER IN ANBINDUNG AN S Q L I T E
-#========================================
+# HIER IN ANBINDUNG AN  SQLITE  über huggingface
+#==================================================
 
 import os
 import sqlite3
@@ -25,20 +25,17 @@ from huggingface_hub import hf_hub_download
 import streamlit as st
 from dotenv import load_dotenv
 
-#load_dotenv()
 try:
  qui = os.environ.get("TOGETHER_API_KEY")
 except: 
  load_dotenv()
  qui = os.environ.get("TOGETHER_API_KEY")
 
-# --- SQLite Pfad ---
-# DB_PATH = os.path.join(os.path.dirname(__file__), 'medical_data.db')
 DB_PATH = "medical_data.db"
 if not os.path.exists(DB_PATH):
     print("⬇️ Lade Datenbank von Hugging Face...")
     hf_hub_download(
-        repo_id="DEIN_USERNAME/medical-chatbot-db",  # ← anpassen
+        repo_id="Sigillus/medic-Chat",  # ← anpassen
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
