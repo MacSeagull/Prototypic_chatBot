@@ -163,8 +163,7 @@ def load_vectorstore_from_sqlite(db_path, embeddings_model):
         return SimpleVectorRetriever(docs, vectors, embeddings_model)
     print("⚠️ Keine Dokumente geladen")
     return None
-
-@st.cache_resource 
+    
 vector_retriever = load_vectorstore_from_sqlite(DB_PATH, embeddings)
 
 bm25_retriever = None
