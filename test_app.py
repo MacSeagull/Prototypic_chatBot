@@ -42,13 +42,14 @@ try:
         local_dir="."
     )
 ####
-  st.title("🔍 Datenbanktest – Venlafaxin")
 except Exception as e:
    st.error(f"❌ Download fehlgeschlagen: {e}")
    st.stop()
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
+
+st.title("🔍 Datenbanktest – Venlafaxin")
 # ERST Tabellen anzeigen
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
 tabellen = [row[0] for row in cursor.fetchall()]
