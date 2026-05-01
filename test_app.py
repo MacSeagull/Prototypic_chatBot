@@ -49,57 +49,7 @@ conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 
-"""st.title("🔍 Datenbanktest – Venlafaxin")
-# ERST Tabellen anzeigen
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-tabellen = [row[0] for row in cursor.fetchall()]
-st.write("📋 Vorhandene Tabellen:", tabellen)
-st.write(f"📦 Dateigröße: {os.path.getsize(DB_PATH)} Bytes")
 
-# NUR wenn Tabelle existiert weitersuchen
-if "langchain_embedding" in tabellen:
-    cursor.execute("SELECT COUNT(*) FROM langchain_embedding")
-    total = cursor.fetchone()[0]
-    st.write(f"📊 Chunks: **{total}**")
-    
-    cursor.execute("""
-        SELECT document, cmetadata 
-        FROM langchain_embedding 
-        WHERE document LIKE '%Venlafaxin%' 
-        LIMIT 5
-    """)
-    rows = cursor.fetchall()
-    st.write(f"🔎 Treffer für 'Venlafaxin': **{len(rows)}**")
-    for i, row in enumerate(rows):
-        with st.expander(f"Treffer {i+1}"):
-            st.write(row[0])
-else:
-    st.error("❌ Tabelle langchain_embedding nicht gefunden!")
-    st.write("💡 Die heruntergeladene DB enthält nur:", tabellen)
-
-conn.close()
-st.stop()  # Rest der App noch nicht laden
-
-total = cursor.fetchone()[0]
-st.write(f"📊 Gesamt-Chunks in langchain_embedding: **{total}**")
-
-# Suche nach Venlafaxin im Dokumenttext
-cursor.execute("""
-    SELECT document, cmetadata 
-    FROM langchain_embedding 
-    WHERE document LIKE '%Venlafaxin%' 
-    LIMIT 5
-""")
-rows = cursor.fetchall()
-conn.close()
-
-st.write(f"🔎 Treffer für 'Venlafaxin': **{len(rows)}**")
-
-for i, row in enumerate(rows):
-    with st.expander(f"Treffer {i+1}"):
-        st.write(row[0])
-        st.json(row[1])
-"""
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
 def get_all_texts_from_db(db_path):
     texts = []
