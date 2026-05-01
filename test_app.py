@@ -297,8 +297,22 @@ Dieses Versuchsprojekt enthält bislang nur folgende Wissensquellen:
 
 st.divider()
 
+
+st.markdown("""
+    <style>
+    .stTextInput label {
+        font-size: 1.5rem !important;
+        font-weight: bold !important;
+    }
+    .stTextInput input {
+        font-size: 1.2rem !important;
+        height: 3rem !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Eingabefeld
-frage = st.text_input("🔍 Ihre Frage:", placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten?   (ins Feld klicken und überschreiben)")
+frage = st.text_input("🔍 Ihre Frage:", placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und unbedingt den Knopf klicken)")
 
 if st.button("Suchen") and frage:
     with st.spinner("Suche läuft..."):
