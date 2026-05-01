@@ -93,7 +93,26 @@ model = ChatOpenAI(
     api_key=qui, 
     model="meta-llama/Llama-3.3-70B-Instruct-Turbo", 
     temperature=0
-)
+)if st.button("Suchen") and frage:
+    with st.spinner("Suche läuft..."):
+        antwort = run_smart_query_streamlit(frage)
+        
+        # Antwort anzeigen
+        st.markdown("### Antwort:")
+        st.markdown(antwort)
+        
+        # Protokoll speichern
+        if "protokoll" not in st.session_state:
+            st.session_state.protokoll = []
+        st.session_state.protokoll.append({"frage": frage, "antwort": antwort})
+
+# Protokoll anzeigen
+if "protokoll" in st.session_state and len(st.session_state.protokoll) > 0:
+    st.divider()
+    st.markdown("### 📋 Bisherige Abfragen")
+    for i, eintrag in enumerate(reversed(st.session_state.protokoll)):
+        with st.expander(f"Frage {len(st.session_state.protokoll)-i}: {eintrag['frage']}"):
+            st.markdown(eintrag["antwort"])
 
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
@@ -300,6 +319,13 @@ Dieses Versuchsprojekt enthält bislang nur folgende Wissensquellen:
 
 st.divider()
 
+st.markdown('<p style="font-size:24px; font-weight:bold;">🔍 Ihre Frage:</p>', unsafe_allow_html=True)
+frage = st.text_input(
+    label="🔍  Ihre Frage", 
+    placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und <SUCHEN> klicken)",
+    label_visibility="collapsed"
+)
+
 # Eingabefeld
 # Die Checkbox für die Quellen-Abfrage
 st.markdown("---")
@@ -329,35 +355,7 @@ if st.button("Suchen") and frage:
             "antwort": antwort, 
             "quellen": quellen
         })
-
-st.markdown('<p style="font-size:24px; font-weight:bold;">🔍 Ihre Frage:</p>', unsafe_allow_html=True)
-frage = st.text_input(
-    label="🔍  Ihre Frage", 
-    placeholder="z.B. Welche Risiken hat Venlafaxin bei älteren Patienten? (überschreiben und <SUCHEN> klicken)",
-    label_visibility="collapsed"
-)
-
-if st.button("Suchen") and frage:
-    with st.spinner("Suche läuft..."):
-        antwort = run_smart_query_streamlit(frage)
         
-        # Antwort anzeigen
-        st.markdown("### Antwort:")
-        st.markdown(antwort)
-        
-        # Protokoll speichern
-        if "protokoll" not in st.session_state:
-            st.session_state.protokoll = []
-        st.session_state.protokoll.append({"frage": frage, "antwort": antwort})
-
-# Protokoll anzeigen
-if "protokoll" in st.session_state and len(st.session_state.protokoll) > 0:
-    st.divider()
-    st.markdown("### 📋 Bisherige Abfragen")
-    for i, eintrag in enumerate(reversed(st.session_state.protokoll)):
-        with st.expander(f"Frage {len(st.session_state.protokoll)-i}: {eintrag['frage']}"):
-            st.markdown(eintrag["antwort"])
-            
 st.divider()
 st.markdown("### like/dislike? 📧 drop a note to Helge")
 
