@@ -42,7 +42,7 @@ try:
         local_dir="."
     )
 ####
-st.title("🔍 Datenbanktest – Venlafaxin")
+  st.title("🔍 Datenbanktest – Venlafaxin")
 except Exception as e:
    st.error(f"❌ Download fehlgeschlagen: {e}")
    st.stop()
