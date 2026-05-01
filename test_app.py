@@ -33,14 +33,19 @@ except:
 
 DB_PATH = "medical_data.db"
 if not os.path.exists(DB_PATH):
-    print("⬇️ Lade Datenbank von Hugging Face...")
-    hf_hub_download(
+    st.info("⬇️ Lade Datenbank von Hugging Face...")
+    try: 
+     hf_hub_download(
         repo_id="Sigillus/medic-Chat",  # ← anpassen
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
-    )
-    print("✅ Datenbank geladen")
+      )
+      st.success("✅ Datenbank geladen")
+    except Exception as e:
+    st.error(f"❌ Download fehlgeschlagen: {e}")
+    st.stop()
+
 db_connection_str = f"sqlite:///{DB_PATH}"
 
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
