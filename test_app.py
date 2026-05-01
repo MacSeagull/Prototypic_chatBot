@@ -34,13 +34,13 @@ except:
 DB_PATH = "medical_data.db"
 #if not os.path.exists(DB_PATH):
 st.info("⬇️ Lade Datenbank von Hugging Face...")
-    try: 
-     hf_hub_download(
+try: 
+    hf_hub_download(
         repo_id="Sigillus/medic-Chat",  # ← anpassen
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
-     )
+    )
     st.success("✅ Datenbank geladen")
 except Exception as e:
    st.error(f"❌ Download fehlgeschlagen: {e}")
