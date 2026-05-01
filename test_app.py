@@ -284,7 +284,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🩺 prototypischer ChatBot mit Sonderwissen für praktische Ärzte")
+st.title("🩺 Prototypischer ChatBot mit Sonderwissen für praktische Ärzte")
 
 st.markdown("""
 Dieses Versuchsprojekt enthält bislang nur folgende Wissensquellen:
@@ -303,11 +303,11 @@ st.divider()
 st.markdown("""
     <style>
     .stTextInput label {
-        font-size: 1.5rem !important;
+        #font-size: 1.rem !important;
         font-weight: bold !important;
     }
     .stTextInput input {
-        font-size: 1.2rem !important;
+        font-size: 1.8rem !important;
         height: 3rem !important;
     }
     </style>
