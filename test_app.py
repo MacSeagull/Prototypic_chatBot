@@ -21,6 +21,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
+from huggingface_hub import hf_hub_download
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -32,9 +33,18 @@ except:
  qui = os.environ.get("TOGETHER_API_KEY")
 
 # --- SQLite Pfad ---
-DB_PATH = os.path.join(os.path.dirname(__file__), 'medical_data.db')
+# DB_PATH = os.path.join(os.path.dirname(__file__), 'medical_data.db')
+DB_PATH = "medical_data.db"
+if not os.path.exists(DB_PATH):
+    print("⬇️ Lade Datenbank von Hugging Face...")
+    hf_hub_download(
+        repo_id="DEIN_USERNAME/medical-chatbot-db",  # ← anpassen
+        filename="medical_data.db",
+        repo_type="dataset",
+        local_dir="."
+    )
+    print("✅ Datenbank geladen")
 db_connection_str = f"sqlite:///{DB_PATH}"
-
 
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
 def get_all_texts_from_db(db_path):
