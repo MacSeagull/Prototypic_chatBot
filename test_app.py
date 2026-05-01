@@ -34,7 +34,7 @@ except:
 st.info("⬇️ Lade Datenbank von Hugging Face, bitte ca.20 Sekunden Geduld")
 DB_PATH = "medical_data.db" 
 try: 
-  if not os.path.exists("DB_PATH"):
+  if not os.path.exists(DB_PATH):
     downloaded = hf_hub_download(
         repo_id="Sigillus/medic_Chat",
         filename="medical_data.db",
@@ -49,6 +49,7 @@ except Exception as e:
 db_connection_str = f"sqlite:///{DB_PATH}"
 
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
+@st.cache_resource
 def get_all_texts_from_db(db_path):
     texts = []
     try:
@@ -86,7 +87,6 @@ def get_all_texts_from_db(db_path):
 
 all_texts = get_all_texts_from_db(DB_PATH)
 
-
 # --- 3. MODELLE & EMBEDDINGS ---
 model = ChatOpenAI(
     base_url="https://api.together.xyz/v1",
@@ -123,7 +123,7 @@ class SimpleVectorRetriever:
         indices = np.argsort(scores)[::-1][:int(k)]
         return [self.docs[i] for i in indices]
 
-
+@st.cache_resource
 def load_vectorstore_from_sqlite(db_path, embeddings_model):
     """
     Lädt Dokumente + bereits gespeicherte Embedding-Vektoren aus SQLite.
@@ -164,6 +164,7 @@ def load_vectorstore_from_sqlite(db_path, embeddings_model):
     print("⚠️ Keine Dokumente geladen")
     return None
 
+@st.cache_resource 
 vector_retriever = load_vectorstore_from_sqlite(DB_PATH, embeddings)
 
 bm25_retriever = None
