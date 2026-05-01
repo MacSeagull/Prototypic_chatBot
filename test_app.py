@@ -53,6 +53,14 @@ st.title("🔍 Datenbanktest – Venlafaxin")
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
+# Zeige alle vorhandenen Tabellen
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+tabellen = [row[0] for row in cursor.fetchall()]
+st.write("📋 Tabellen in der heruntergeladenen DB:", tabellen)
+
+# Dateigröße prüfen
+st.write(f"📦 Dateigröße: {os.path.getsize(DB_PATH)} Bytes")
+
 # Wie viele Einträge insgesamt?
 cursor.execute("SELECT COUNT(*) FROM langchain_embedding")
 total = cursor.fetchone()[0]
