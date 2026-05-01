@@ -31,7 +31,7 @@ except:
     load_dotenv()
     qui = os.environ.get("TOGETHER_API_KEY")
 
-st.info("⬇️ Lade Datenbank von Hugging Face, bitte ca.20 Sekunden Geduld")
+st.info("⬇️ Lade Datenbank aus dem Netz, bitte ca.20 Sekunden Geduld")
 DB_PATH = "medical_data.db" 
 try: 
   if not os.path.exists(DB_PATH):
@@ -85,7 +85,7 @@ def get_all_texts_from_db(db_path):
         print(f"Fehler beim Laden der Texte: {e}")
     return texts
 
-#all_texts = get_all_texts_from_db(DB_PATH)
+all_texts = get_all_texts_from_db(DB_PATH)
 
 # --- 3. MODELLE & EMBEDDINGS ---
 model = ChatOpenAI(
