@@ -85,7 +85,7 @@ def get_all_texts_from_db(db_path):
         print(f"Fehler beim Laden der Texte: {e}")
     return texts
 
-all_texts = get_all_texts_from_db(DB_PATH)
+#all_texts = get_all_texts_from_db(DB_PATH)
 
 # --- 3. MODELLE & EMBEDDINGS ---
 model = ChatOpenAI(
