@@ -36,7 +36,7 @@ DB_PATH = "medical_data.db"
 st.info("⬇️ Lade Datenbank von Hugging Face, bitte Geduld")
 try: 
     hf_hub_download(
-        repo_id="Sigillus/medic-Chat",  # ← anpassen
+        repo_id="Sigillus/medic_Chat",  # ← anpassen
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
