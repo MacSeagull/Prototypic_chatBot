@@ -33,6 +33,7 @@ except:
 
 st.info("⬇️ Lade Datenbank von Hugging Face, bitte Geduld")
 try: 
+  if not os.path.exists("medical_data.db"):
     downloaded = hf_hub_download(
         repo_id="Sigillus/medic_Chat",  # ← anpassen
         filename="medical_data.db",
