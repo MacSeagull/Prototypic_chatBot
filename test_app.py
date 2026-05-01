@@ -49,7 +49,7 @@ conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 
-st.title("🔍 Datenbanktest – Venlafaxin")
+"""st.title("🔍 Datenbanktest – Venlafaxin")
 # ERST Tabellen anzeigen
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
 tabellen = [row[0] for row in cursor.fetchall()]
@@ -79,7 +79,7 @@ else:
 
 conn.close()
 st.stop()  # Rest der App noch nicht laden
-####
+
 total = cursor.fetchone()[0]
 st.write(f"📊 Gesamt-Chunks in langchain_embedding: **{total}**")
 
@@ -99,8 +99,7 @@ for i, row in enumerate(rows):
     with st.expander(f"Treffer {i+1}"):
         st.write(row[0])
         st.json(row[1])
-
-####
+"""
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
 def get_all_texts_from_db(db_path):
     texts = []
