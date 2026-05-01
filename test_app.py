@@ -31,11 +31,12 @@ except:
     load_dotenv()
     qui = os.environ.get("TOGETHER_API_KEY")
 
-st.info("⬇️ Lade Datenbank von Hugging Face, bitte Geduld")
+st.info("⬇️ Lade Datenbank von Hugging Face, bitte ca.20 Sekunden Geduld")
+DB_PATH = "medical_data.db" 
 try: 
-  if not os.path.exists("medical_data.db"):
+  if not os.path.exists("DB_PATH"):
     downloaded = hf_hub_download(
-        repo_id="Sigillus/medic_Chat",  # ← anpassen
+        repo_id="Sigillus/medic_Chat",
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
