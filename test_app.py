@@ -43,7 +43,9 @@ try:
     )
 ####
 st.title("🔍 Datenbanktest – Venlafaxin")
-
+except Exception as e:
+   st.error(f"❌ Download fehlgeschlagen: {e}")
+   st.stop()
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
