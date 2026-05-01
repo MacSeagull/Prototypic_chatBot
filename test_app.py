@@ -31,24 +31,20 @@ except:
     load_dotenv()
     qui = os.environ.get("TOGETHER_API_KEY")
 
-DB_PATH = "medical_data.db"
-#if not os.path.exists(DB_PATH):
 st.info("⬇️ Lade Datenbank von Hugging Face, bitte Geduld")
 try: 
-    hf_hub_download(
+    downloaded = hf_hub_download(
         repo_id="Sigillus/medic_Chat",  # ← anpassen
         filename="medical_data.db",
         repo_type="dataset",
         local_dir="."
     )
-####
+    DB_PATH = downloaded
 except Exception as e:
    st.error(f"❌ Download fehlgeschlagen: {e}")
    st.stop()
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
-
-
+    
+db_connection_str = f"sqlite:///{DB_PATH}"
 
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
 def get_all_texts_from_db(db_path):
