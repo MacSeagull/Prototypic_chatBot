@@ -33,7 +33,7 @@ except:
 
 DB_PATH = "medical_data.db"
 #if not os.path.exists(DB_PATH):
-st.info("⬇️ Lade Datenbank von Hugging Face...")
+st.info("⬇️ Lade Datenbank von Hugging Face, bitte Geduld")
 try: 
     hf_hub_download(
         repo_id="Sigillus/medic-Chat",  # ← anpassen
@@ -47,7 +47,35 @@ except Exception as e:
    st.stop()
 
 db_connection_str = f"sqlite:///{DB_PATH}"
+#####
+st.title("🔍 Datenbanktest – Venlafaxin")
 
+conn = sqlite3.connect(DB_PATH)
+cursor = conn.cursor()
+
+# Wie viele Einträge insgesamt?
+cursor.execute("SELECT COUNT(*) FROM langchain_embedding")
+total = cursor.fetchone()[0]
+st.write(f"📊 Gesamt-Chunks in langchain_embedding: **{total}**")
+
+# Suche nach Venlafaxin im Dokumenttext
+cursor.execute("""
+    SELECT document, cmetadata 
+    FROM langchain_embedding 
+    WHERE document LIKE '%Venlafaxin%' 
+    LIMIT 5
+""")
+rows = cursor.fetchall()
+conn.close()
+
+st.write(f"🔎 Treffer für 'Venlafaxin': **{len(rows)}**")
+
+for i, row in enumerate(rows):
+    with st.expander(f"Treffer {i+1}"):
+        st.write(row[0])
+        st.json(row[1])
+
+####
 # --- 2. TEXTE AUS DB LADEN (für BM25) ---
 def get_all_texts_from_db(db_path):
     texts = []
