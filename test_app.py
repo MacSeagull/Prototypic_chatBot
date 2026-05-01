@@ -274,10 +274,15 @@ def run_smart_query_streamlit(question):
         "context": data["context"],
         "question": question
         })
-        return result.content
+        return  {
+            "antwort": result.content, 
+            "quellen": data["sources"]
+        } 
     except Exception as e:
-      return f"Fehler: {e}"
-
+      return {
+            "antwort": f"Ein Fehler ist aufgetreten: {str(e)}", 
+            "quellen": ""
+        }
 
 st.set_page_config(
     page_title="ChatBot für praktische Ärzte",
@@ -307,8 +312,7 @@ frage = st.text_input(
     label_visibility="collapsed"
 )
 
-# Eingabefeld
-# Die Checkbox für die Quellen-Abfrage
+# Eingabefeld  und  Checkbox für die Quellen-Abfrage
 st.markdown("---")
 quellen_anzeigen = st.checkbox("Quellen anzeigen?")
 
