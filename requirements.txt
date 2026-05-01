@@ -12,3 +12,4 @@ numpy
 pandas
 requests
 sqlalchemy
+huggingface-hub
